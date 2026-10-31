@@ -15,7 +15,12 @@
    - [Bước 5 (Tùy chọn): Cài đặt Perl nếu muốn dùng `latexmk`](#bước-5-tùy-chọn-cài-đặt-perl-nếu-muốn-dùng-latexmk)
 3. [Hướng dẫn biên dịch và xem PDF trong VS Code](#3-hướng-dẫn-biên-dịch-và-xem-pdf-trong-vs-code)
 4. [Cấu trúc thư mục & Những file cần chỉnh sửa](#4-cấu-trúc-thư-mục--những-file-cần-chỉnh-sửa)
-5. [Các lỗi thường gặp và cách xử lý (Troubleshooting)](#5-các-lỗi-thường-gặp-và-cách-xử-lý)
+5. [Quy trình làm việc nhóm với Git Worktree (Dành cho cả Team)](#5-quy-trình-làm-việc-nhóm-với-git-worktree-dành-cho-cả-team)
+   - [Git Worktree là gì và vì sao nên dùng?](#51-git-worktree-là-gì-và-vì-sao-nên-dùng)
+   - [Bảng tra cứu lệnh Worktree nhanh](#52-bảng-tra-cứu-lệnh-worktree-nhanh)
+   - [Quy trình 5 bước phối hợp nhóm chuẩn](#53-quy-trình-5-bước-phối-hợp-nhóm-chuẩn)
+   - [Mẹo tránh xung đột (Conflict) khi viết báo cáo](#54-mẹo-tránh-xung-đột-conflict-khi-viết-báo-cáo)
+6. [Các lỗi thường gặp và cách xử lý (Troubleshooting)](#6-các-lỗi-thường-gặp-và-cách-xử-lý)
 
 ---
 
@@ -30,7 +35,7 @@ Trong template ban đầu, một số vấn đề khiến việc biên dịch tr
    - *Nguyên nhân*: LaTeX Workshop tự nhận diện file đang mở làm file gốc để build.
    - *Đã khắc phục*: Cố định root document `"latex-workshop.latex.rootFile.useFile": "do-an.tex"`. Bạn có thể đứng ở bất kỳ file chương nào sửa và nhấn `Ctrl + S`, VS Code đều sẽ tự biên dịch đúng file tổng `do-an.tex`.
 3. **Cập nhật thông tin đồ án trong `do-an.tex`**:
-   - Khai báo đúng loại báo cáo `\crname{BÁO CÁO ĐỒ ÁN JAVA NÂNG CAO}`, tên đề tài và thông tin sinh viên thực hiện.
+   - Khai báo đúng loại báo cáo `\crname{BÁO CÁO ĐỒ ÁN JAVA NÂNG CAO}`, tên đề tài, học phần và thông tin 2 thành viên trong nhóm.
 4. **Tích hợp xem trước PDF trực tiếp trong VS Code**:
    - Đã cấu hình tab PDF viewer mở song song bên cạnh mã nguồn và kích hoạt đồng bộ hóa SyncTeX hai chiều (bấm vào code nhảy đến trang PDF và ngược lại).
 
@@ -105,7 +110,7 @@ Nếu muốn dùng lệnh `latexmk` trên Terminal:
   - Mở menu **Commands** ➔ **Build LaTeX project**.
   - Chọn recipe: **`XeLaTeX ➞ BibTeX ➞ XeLaTeX ➞ XeLaTeX`**.
 
-### Cách 3: Mở bản xem trước PDF
+### Cách 3: Mở bản xem trước PDF song song 1 bên tab
 - Nhấn tổ hợp phím: **`Ctrl + Alt + V`**.
 - Hoặc bấm vào biểu tượng **View LaTeX PDF** (kính lúp có trang tài liệu) ở góc trên bên phải thanh soạn thảo.
 - PDF sẽ mở ngay trên một tab bên cạnh file mã nguồn.
@@ -131,7 +136,115 @@ Nếu muốn dùng lệnh `latexmk` trên Terminal:
 
 ---
 
-## 5. Các lỗi thường gặp và cách xử lý
+## 5. Quy trình làm việc nhóm với Git Worktree (Dành cho cả Team)
+
+### 5.1 Git Worktree là gì và vì sao nên dùng?
+
+- **Vấn đề khi làm việc nhóm bình thường:**
+  Khi bạn dùng `git checkout` hoặc `git switch` để chuyển giữa các nhánh, toàn bộ file trong thư mục sẽ bị tráo đổi. Với tài liệu LaTeX, việc này khiến các file biên dịch (`.aux`, `.pdf`, `.synctex.gz`) dễ bị xung đột, hoặc bạn phải `git stash` cất code dở dang rất phiền phức.
+- **Giải pháp `git worktree`:**
+  Cho phép bạn tạo ra **nhiều thư mục làm việc riêng biệt** trên cùng một máy tính, mỗi thư mục gắn với một nhánh (branch) khác nhau nhưng **dùng chung một kho dữ liệu Git** (không tốn dung lượng ổ cứng, không cần clone lại).
+- **Mô hình phối hợp trong team:**
+  - Thư mục chính: `template-do-an-ttnt` (nhánh `main`)
+  - Worktree 1: `../do-an-nam` (nhánh `feature/chuong1-nam`)
+  - Worktree 2: `../do-an-trinh` (nhánh `feature/chuong2-trinh`)
+  Mỗi bạn có thể mở một thư mục riêng trong VS Code, viết báo cáo và xuất PDF độc lập mà **không bao giờ ảnh hưởng đến nhau**.
+
+---
+
+### 5.2 Bảng tra cứu lệnh Worktree nhanh
+
+| Thao tác | Câu lệnh Terminal |
+|---|---|
+| **Xem danh sách worktree** | `git worktree list` |
+| **Tạo worktree mới kèm nhánh mới** | `git worktree add <đường-dẫn-thư-mục> -b <tên-nhánh>` |
+| **Tạo worktree từ nhánh có sẵn** | `git worktree add <đường-dẫn-thư-mục> <tên-nhánh-đã-có>` |
+| **Xóa một worktree sau khi xong việc** | `git worktree remove <đường-dẫn-thư-mục>` |
+| **Dọn dẹp danh sách worktree rác** | `git worktree prune` |
+
+---
+
+### 5.3 Quy trình 5 bước phối hợp nhóm chuẩn
+
+#### Bước 1: Kéo bản mới nhất của nhánh `main` về máy
+Trước khi làm việc mới, đứng tại thư mục gốc của dự án và chạy:
+```powershell
+git checkout main
+git pull origin main
+```
+
+#### Bước 2: Tạo Worktree riêng cho tính năng / chương bạn đảm nhận
+Tạo một thư mục nằm cạnh thư mục hiện tại để làm việc trên nhánh mới:
+```powershell
+# Ví dụ: Bạn Nam làm Chương 1
+git worktree add ../do-an-nam -b feature/chuong1-nam
+
+# Hoặc: Bạn Trinh làm Chương 2
+git worktree add ../do-an-trinh -b feature/chuong2-trinh
+```
+Lúc này, trên máy tính sẽ xuất hiện thêm một thư mục riêng biệt (`do-an-nam` hoặc `do-an-trinh`).
+
+#### Bước 3: Mở thư mục mới trong VS Code và viết bài
+1. Mở VS Code ➔ **File** ➔ **Open Folder...** ➔ Chọn thư mục vừa tạo (`../do-an-nam`).
+2. Mở file [chuong/01-mo-dau.tex](file:///D:/DaiHoc/Nam3/ĐỒ%20ÁN%20JAVA/template-do-an-ttnt/chuong/01-mo-dau.tex) viết nội dung và nhấn `Ctrl + S` để biên dịch xem trước PDF.
+3. Sau khi hoàn thành một đoạn nội dung, commit lại:
+   ```powershell
+   git add .
+   git commit -m "Soan thao xong muc 1.1 va 1.2 Chuong Mo Dau"
+   ```
+
+#### Bước 4: Đẩy nhánh lên GitHub và gộp vào `main`
+
+##### Cách A: Đẩy nhánh lên GitHub và tạo Pull Request (Khuyên dùng)
+Đẩy nhánh cá nhân lên GitHub:
+```powershell
+git push -u origin feature/chuong1-nam
+```
+Vào link repository trên GitHub ([https://github.com/Lnnam123/bao-cao-java-nang-cao](https://github.com/Lnnam123/bao-cao-java-nang-cao)):
+1. Bấm **Compare & pull request**.
+2. Nhờ đồng đội kiểm tra và nhấn **Merge pull request** để gộp vào `main`.
+
+##### Cách B: Merge trực tiếp vào `main` tại máy rồi push
+Nếu cả nhóm thống nhất merge trực tiếp:
+```powershell
+# 1. Quay lại thư mục chính (nhánh main)
+cd ../template-do-an-ttnt
+git checkout main
+git pull origin main
+
+# 2. Gộp nhánh tính năng vào main
+git merge feature/chuong1-nam
+
+# 3. Đẩy kết quả đã gộp lên GitHub
+git push origin main
+```
+
+#### Bước 5: Dọn dẹp Worktree sau khi đã hoàn thành
+Khi nội dung đã được gộp thành công vào `main`, bạn xóa thư mục worktree tạm đi để giữ máy tính gọn gàng:
+```powershell
+# Xóa thư mục worktree
+git worktree remove ../do-an-nam
+
+# Xóa nhánh cục bộ sau khi đã merge
+git branch -d feature/chuong1-nam
+```
+
+---
+
+### 5.4 Mẹo tránh xung đột (Conflict) khi viết báo cáo
+
+1. **Phân chia rõ ràng file chương:**
+   - Mỗi thành viên phụ trách các file riêng biệt trong thư mục `chuong/` (ví dụ Nam viết `chuong/01-mo-dau.tex`, Trinh viết `chuong/02-co-so-ly-thuyet.tex`).
+   - Không cùng lúc sửa chung một file `refs.bib` hoặc `do-an.tex`.
+2. **Luôn `git pull` trước khi bắt tay vào viết:**
+   - Đảm bảo nhánh gốc của bạn luôn mang nội dung mới nhất mà đồng đội vừa hoàn thành.
+3. **Nếu có xung đột:**
+   - VS Code sẽ làm nổi bật đoạn code xung đột bằng màu sắc và các tùy chọn: *Accept Current Change*, *Accept Incoming Change*, hoặc *Accept Both Changes*.
+   - Cả 2 bạn chỉ cần ngồi lại, chọn giữ lại phần đúng nhất và lưu lại là xong!
+
+---
+
+## 6. Các lỗi thường gặp và cách xử lý
 
 ### 1. Báo cáo bị lỗi font tiếng Việt khi dùng trình biên dịch khác
 - **Nguyên nhân**: Mẫu báo cáo dùng gói `fontspec` và `polyglossia`, chỉ tương thích với **XeLaTeX**. Nếu vô tình để VS Code chạy `pdfLaTeX`, bạn sẽ gặp lỗi `Fatal error: fontspec requires XeTeX or LuaTeX`.
