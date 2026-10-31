@@ -360,9 +360,11 @@
 % \parskip phải về 0 ở đây, nếu không gói parskip sẽ đẩy lệch các ô của bảng
 {\fontsize{13}{20}\selectfont\setlength{\parskip}{0pt}\setlength{\parindent}{0pt}
 \begin{flushleft}
-\hspace{0.6cm}\begin{tabular}{@{}>{\bfseries\color{daunavy}}l @{\hspace{0.3cm}}c@{\hspace{0.3cm}}>{\raggedright\arraybackslash\bfseries}p{7.6cm}@{}}
-  Sinh viên thực hiện & : & \@stuname{} (\@smssv)%
-    \ifx\@stunameB\empty\else\newline \@stunameB{} (\@smssvB)\fi\\[4pt]
+\hspace{0.5cm}\begin{tabular}{@{}>{\bfseries\color{daunavy}}l @{\hspace{0.3cm}}c@{\hspace{0.3cm}}>{\raggedright\arraybackslash\bfseries}p{9.8cm}@{}}
+  Sinh viên thực hiện & : & \begin{tabular}[t]{@{}l@{}}
+                              \@stuname{} (\@smssv)%
+                              \ifx\@stunameB\empty\else\\[2pt] \@stunameB{} (\@smssvB)\fi
+                            \end{tabular}\\[4pt]
   Lớp & : & \@slopsv\\[4pt]
   Ngành & : & \@sCouncil\\[4pt]
   Giảng viên hướng dẫn & : & \@sSupervise\\[4pt]
@@ -402,10 +404,12 @@
   \node[anchor=north west, text=daunavy, align=left, text width=0.80\paperwidth]
     at ([xshift=2.4cm, yshift=-13.5cm]current page.north west)
     {\renewcommand{\arraystretch}{1.6}%
-     \begin{tabular}{@{}>{\raggedright\arraybackslash\bfseries\color{daumaroon}}p{5.3cm} >{\raggedright\arraybackslash\color{daunavy}}p{8.6cm}@{}}
+     \begin{tabular}{@{}>{\raggedright\arraybackslash\bfseries\color{daumaroon}}p{5.3cm} >{\raggedright\arraybackslash\color{daunavy}}p{9.8cm}@{}}
         Loại báo cáo: & \@rname\\
-        Sinh viên thực hiện: & \@stuname{} (\@smssv)%
-          \ifx\@stunameB\empty\else\newline \@stunameB{} (\@smssvB)\fi\\
+        Sinh viên thực hiện: & \begin{tabular}[t]{@{}l@{}}
+                                 \@stuname{} (\@smssv)%
+                                 \ifx\@stunameB\empty\else\\[2pt] \@stunameB{} (\@smssvB)\fi
+                               \end{tabular}\\
         Ngành: & \@sCouncil\\
         Giảng viên hướng dẫn: & \@sSupervise\\
      \end{tabular}};
