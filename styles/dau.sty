@@ -253,7 +253,7 @@
   \renewcommand{\headrule}{\hbox to\headwidth{\color{daugold}\leaders\hrule height \headrulewidth\hfill}}%
   \fancyhead[L]{\footnotesize\color{gray500}\nouppercase{\leftmark}}%
   \fancyhead[R]{\footnotesize\color{gray500}\@rname}%
-  \fancyfoot[L]{\footnotesize\color{gray500}\@stuname{} \textperiodcentered{} \@smssv}%
+  \fancyfoot[L]{\footnotesize\color{gray500}\@stuname\ifx\@stunameB\empty\else, \@stunameB\fi{} \textperiodcentered{} \@smssv\ifx\@smssvB\empty\else, \@smssvB\fi}%
   \fancyfoot[R]{\footnotesize\color{gray500}\thepage}%
   \renewcommand{\chaptermark}[1]{\markboth{Chương \thechapter.\ ##1}{}}%
 }
@@ -281,6 +281,12 @@
 \newcommand{\@smssv}{2022xxxxx}
 \newcommand{\cmssv}[1]{\renewcommand{\@smssv}{#1}}
 
+% Sinh viên thứ 2 (dành cho nhóm 2 người)
+\newcommand{\@stunameB}{}
+\newcommand{\cstunameB}[1]{\renewcommand{\@stunameB}{#1}}
+\newcommand{\@smssvB}{}
+\newcommand{\cmssvB}[1]{\renewcommand{\@smssvB}{#1}}
+
 \newcommand{\@sCouncil}{Công nghệ thông tin}
 \newcommand{\csCouncil}[1]{\renewcommand{\@sCouncil}{#1}}
 
@@ -305,8 +311,10 @@
 % Lệnh công khai để gọi lại thông tin trong các file chương.
 % Trong file chương thì ký tự @ không dùng được, nên phải đi qua các
 % lệnh này thay vì gọi thẳng \@stuname, \@sSupervise...
-\newcommand{\dauSinhVien}{\@stuname}
-\newcommand{\dauMSSV}{\@smssv}
+\newcommand{\dauSinhVien}{\@stuname\ifx\@stunameB\empty\else\\ \@stunameB\fi}
+\newcommand{\dauSinhVienB}{\@stunameB}
+\newcommand{\dauMSSV}{\@smssv\ifx\@smssvB\empty\else, \@smssvB\fi}
+\newcommand{\dauMSSVB}{\@smssvB}
 \newcommand{\dauLop}{\@slopsv}
 \newcommand{\dauMonHoc}{\@smonhoc}
 \newcommand{\dauGVHD}{\@sSupervise}
@@ -353,7 +361,8 @@
 {\fontsize{13}{20}\selectfont\setlength{\parskip}{0pt}\setlength{\parindent}{0pt}
 \begin{flushleft}
 \hspace{0.6cm}\begin{tabular}{@{}>{\bfseries\color{daunavy}}l @{\hspace{0.3cm}}c@{\hspace{0.3cm}}>{\raggedright\arraybackslash\bfseries}p{7.6cm}@{}}
-  Sinh viên thực hiện & : & \@stuname{} (\@smssv)\\[4pt]
+  Sinh viên thực hiện & : & \@stuname{} (\@smssv)%
+    \ifx\@stunameB\empty\else\newline \@stunameB{} (\@smssvB)\fi\\[4pt]
   Lớp & : & \@slopsv\\[4pt]
   Ngành & : & \@sCouncil\\[4pt]
   Giảng viên hướng dẫn & : & \@sSupervise\\[4pt]
@@ -395,7 +404,8 @@
     {\renewcommand{\arraystretch}{1.6}%
      \begin{tabular}{@{}>{\raggedright\arraybackslash\bfseries\color{daumaroon}}p{5.3cm} >{\raggedright\arraybackslash\color{daunavy}}p{8.6cm}@{}}
         Loại báo cáo: & \@rname\\
-        Sinh viên thực hiện: & \@stuname{} (\@smssv)\\
+        Sinh viên thực hiện: & \@stuname{} (\@smssv)%
+          \ifx\@stunameB\empty\else\newline \@stunameB{} (\@smssvB)\fi\\
         Ngành: & \@sCouncil\\
         Giảng viên hướng dẫn: & \@sSupervise\\
      \end{tabular}};
